@@ -1,2 +1,10 @@
+import { prisma } from './generated/prisma-client';
 
-console.log("Hello World!");
+// A `main` function so that we can use async/await
+async function main() {
+  // Read all users from the database and print them to the console
+  const allUsers = await prisma.users()
+  console.log(allUsers)
+}
+
+main().catch(e => console.error(e))

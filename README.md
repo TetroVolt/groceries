@@ -9,28 +9,20 @@ I am going to the store and I have a recipe in mind and I know I am going to nee
 
 I am already driving passed a grocery store so I decide to run in and grab milk. When I get home I see that I already had them in the fridge. The milk expired before I could use it all.
 
-## Instructions:
+## Development Instructions:
 
-Before getting started make a groceries/.env file for dotenv and include the following
+### Step 1: Start the prisma server
+Run `docker-compose -f docker_configs/docker-compose.yml up` to start the prisma server.
 
-```
-//.env
-AUTH0_DOMAIN=<YOUR_AUTH0_DOMAIN>
-API_IDENTIFIER=<YOUR_API_IDENTIFIER>
-MONGO_CONNECT=<YOUR_MONGO_CONNECTION>
-```
+### Step 2: (Optional) Generate the prisma client
+Run `prisma generate` to generate the client library if needed and it will generate the client based on
+where prisma/prisma.yml specifies. In this case in src/generated/prisma-client
 
-After setting up .env
+### Step 3: Seed Data
+Seed the database with data in prisma/seed.ts
 
-```
-$ npm install
-$ npm start
-```
-
-If you have docker-compose you may also run `docker-compose up`
-
-
-
+### Step 4: Prisma Deploy
+Run `prisma deploy` to deploy the server.
 
 Goals:
 Use Grocery store open API to keep track of the thing I have so I don't end up buying the same stuff a dozen times.
