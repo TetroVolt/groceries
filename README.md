@@ -1,4 +1,4 @@
-# Groceries App Typescript converstion
+# Groceries App Typescript conversion
 Uses prisma.io
 
 Following this example
