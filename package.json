@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "yarn run build && node build/index.js",
+    "start:ts": "ts-node --transpile-only ./src",
     "start:dev": "nodemon",
     "prisma:generate": "yarn exec prisma generate",
     "prisma:deploy": "yarn exec prisma deploy",
