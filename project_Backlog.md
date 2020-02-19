@@ -3,3 +3,4 @@
 - authorization for features
 
 - SECURE THIS DATABASE
+- Auth0 hook after new user

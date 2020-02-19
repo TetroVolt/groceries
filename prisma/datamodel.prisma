@@ -1,31 +1,17 @@
 
-type User {
-  id: ID! @id
-  email: String! @unique
-  name: String!
-}
-
-type GroceryTrip {
-  id: ID! @id
-  purchaser: User! @relation(link: INLINE)
-  name: String!
-  description: String
-  date: String
-}
-
 type GroceryItem {
   id: ID! @id
-  associatedTrip: GroceryTrip @relation(link: INLINE)
   name: String!
-  count: Float!
-  expiration: String
+  description: String
+  count: Float! @default(value: 1)
+  expiration: DateTime
   UPC: String
+  category: GroceryCategory @relation(link: INLINE)
 }
 
 type GroceryCategory {
   id: ID! @id
-  name: String!
-  tags: [String]!
+  name: String! @unique
+  description: String
   units: String
-  items: [GroceryItem]! @relation(link: INLINE)
 }

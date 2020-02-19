@@ -10,24 +10,17 @@ type AggregateGroceryItem {
   count: Int!
 }
 
-type AggregateGroceryTrip {
-  count: Int!
-}
-
-type AggregateUser {
-  count: Int!
-}
-
 type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 type GroceryCategory {
   id: ID!
   name: String!
-  tags: [String!]!
+  description: String
   units: String
-  items(where: GroceryItemWhereInput, orderBy: GroceryItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GroceryItem!]
 }
 
 type GroceryCategoryConnection {
@@ -39,13 +32,13 @@ type GroceryCategoryConnection {
 input GroceryCategoryCreateInput {
   id: ID
   name: String!
-  tags: GroceryCategoryCreatetagsInput
+  description: String
   units: String
-  items: GroceryItemCreateManyInput
 }
 
-input GroceryCategoryCreatetagsInput {
-  set: [String!]
+input GroceryCategoryCreateOneInput {
+  create: GroceryCategoryCreateInput
+  connect: GroceryCategoryWhereUniqueInput
 }
 
 type GroceryCategoryEdge {
@@ -58,6 +51,8 @@ enum GroceryCategoryOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  description_ASC
+  description_DESC
   units_ASC
   units_DESC
 }
@@ -65,7 +60,7 @@ enum GroceryCategoryOrderByInput {
 type GroceryCategoryPreviousValues {
   id: ID!
   name: String!
-  tags: [String!]!
+  description: String
   units: String
 }
 
@@ -85,21 +80,36 @@ input GroceryCategorySubscriptionWhereInput {
   AND: [GroceryCategorySubscriptionWhereInput!]
 }
 
+input GroceryCategoryUpdateDataInput {
+  name: String
+  description: String
+  units: String
+}
+
 input GroceryCategoryUpdateInput {
   name: String
-  tags: GroceryCategoryUpdatetagsInput
+  description: String
   units: String
-  items: GroceryItemUpdateManyInput
 }
 
 input GroceryCategoryUpdateManyMutationInput {
   name: String
-  tags: GroceryCategoryUpdatetagsInput
+  description: String
   units: String
 }
 
-input GroceryCategoryUpdatetagsInput {
-  set: [String!]
+input GroceryCategoryUpdateOneInput {
+  create: GroceryCategoryCreateInput
+  update: GroceryCategoryUpdateDataInput
+  upsert: GroceryCategoryUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: GroceryCategoryWhereUniqueInput
+}
+
+input GroceryCategoryUpsertNestedInput {
+  update: GroceryCategoryUpdateDataInput!
+  create: GroceryCategoryCreateInput!
 }
 
 input GroceryCategoryWhereInput {
@@ -131,6 +141,20 @@ input GroceryCategoryWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
   units: String
   units_not: String
   units_in: [String!]
@@ -145,21 +169,22 @@ input GroceryCategoryWhereInput {
   units_not_starts_with: String
   units_ends_with: String
   units_not_ends_with: String
-  items_some: GroceryItemWhereInput
   AND: [GroceryCategoryWhereInput!]
 }
 
 input GroceryCategoryWhereUniqueInput {
   id: ID
+  name: String
 }
 
 type GroceryItem {
   id: ID!
-  associatedTrip: GroceryTrip
   name: String!
+  description: String
   count: Float!
-  expiration: String
+  expiration: DateTime
   UPC: String
+  category: GroceryCategory
 }
 
 type GroceryItemConnection {
@@ -170,16 +195,12 @@ type GroceryItemConnection {
 
 input GroceryItemCreateInput {
   id: ID
-  associatedTrip: GroceryTripCreateOneInput
   name: String!
-  count: Float!
-  expiration: String
+  description: String
+  count: Float
+  expiration: DateTime
   UPC: String
-}
-
-input GroceryItemCreateManyInput {
-  create: [GroceryItemCreateInput!]
-  connect: [GroceryItemWhereUniqueInput!]
+  category: GroceryCategoryCreateOneInput
 }
 
 type GroceryItemEdge {
@@ -192,6 +213,8 @@ enum GroceryItemOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  description_ASC
+  description_DESC
   count_ASC
   count_DESC
   expiration_ASC
@@ -203,79 +226,10 @@ enum GroceryItemOrderByInput {
 type GroceryItemPreviousValues {
   id: ID!
   name: String!
+  description: String
   count: Float!
-  expiration: String
+  expiration: DateTime
   UPC: String
-}
-
-input GroceryItemScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  count: Float
-  count_not: Float
-  count_in: [Float!]
-  count_not_in: [Float!]
-  count_lt: Float
-  count_lte: Float
-  count_gt: Float
-  count_gte: Float
-  expiration: String
-  expiration_not: String
-  expiration_in: [String!]
-  expiration_not_in: [String!]
-  expiration_lt: String
-  expiration_lte: String
-  expiration_gt: String
-  expiration_gte: String
-  expiration_contains: String
-  expiration_not_contains: String
-  expiration_starts_with: String
-  expiration_not_starts_with: String
-  expiration_ends_with: String
-  expiration_not_ends_with: String
-  UPC: String
-  UPC_not: String
-  UPC_in: [String!]
-  UPC_not_in: [String!]
-  UPC_lt: String
-  UPC_lte: String
-  UPC_gt: String
-  UPC_gte: String
-  UPC_contains: String
-  UPC_not_contains: String
-  UPC_starts_with: String
-  UPC_not_starts_with: String
-  UPC_ends_with: String
-  UPC_not_ends_with: String
-  AND: [GroceryItemScalarWhereInput!]
-  OR: [GroceryItemScalarWhereInput!]
-  NOT: [GroceryItemScalarWhereInput!]
 }
 
 type GroceryItemSubscriptionPayload {
@@ -294,62 +248,21 @@ input GroceryItemSubscriptionWhereInput {
   AND: [GroceryItemSubscriptionWhereInput!]
 }
 
-input GroceryItemUpdateDataInput {
-  associatedTrip: GroceryTripUpdateOneInput
-  name: String
-  count: Float
-  expiration: String
-  UPC: String
-}
-
 input GroceryItemUpdateInput {
-  associatedTrip: GroceryTripUpdateOneInput
   name: String
+  description: String
   count: Float
-  expiration: String
+  expiration: DateTime
   UPC: String
-}
-
-input GroceryItemUpdateManyDataInput {
-  name: String
-  count: Float
-  expiration: String
-  UPC: String
-}
-
-input GroceryItemUpdateManyInput {
-  create: [GroceryItemCreateInput!]
-  update: [GroceryItemUpdateWithWhereUniqueNestedInput!]
-  upsert: [GroceryItemUpsertWithWhereUniqueNestedInput!]
-  delete: [GroceryItemWhereUniqueInput!]
-  connect: [GroceryItemWhereUniqueInput!]
-  set: [GroceryItemWhereUniqueInput!]
-  disconnect: [GroceryItemWhereUniqueInput!]
-  deleteMany: [GroceryItemScalarWhereInput!]
-  updateMany: [GroceryItemUpdateManyWithWhereNestedInput!]
+  category: GroceryCategoryUpdateOneInput
 }
 
 input GroceryItemUpdateManyMutationInput {
   name: String
+  description: String
   count: Float
-  expiration: String
+  expiration: DateTime
   UPC: String
-}
-
-input GroceryItemUpdateManyWithWhereNestedInput {
-  where: GroceryItemScalarWhereInput!
-  data: GroceryItemUpdateManyDataInput!
-}
-
-input GroceryItemUpdateWithWhereUniqueNestedInput {
-  where: GroceryItemWhereUniqueInput!
-  data: GroceryItemUpdateDataInput!
-}
-
-input GroceryItemUpsertWithWhereUniqueNestedInput {
-  where: GroceryItemWhereUniqueInput!
-  update: GroceryItemUpdateDataInput!
-  create: GroceryItemCreateInput!
 }
 
 input GroceryItemWhereInput {
@@ -367,180 +280,6 @@ input GroceryItemWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  associatedTrip: GroceryTripWhereInput
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  count: Float
-  count_not: Float
-  count_in: [Float!]
-  count_not_in: [Float!]
-  count_lt: Float
-  count_lte: Float
-  count_gt: Float
-  count_gte: Float
-  expiration: String
-  expiration_not: String
-  expiration_in: [String!]
-  expiration_not_in: [String!]
-  expiration_lt: String
-  expiration_lte: String
-  expiration_gt: String
-  expiration_gte: String
-  expiration_contains: String
-  expiration_not_contains: String
-  expiration_starts_with: String
-  expiration_not_starts_with: String
-  expiration_ends_with: String
-  expiration_not_ends_with: String
-  UPC: String
-  UPC_not: String
-  UPC_in: [String!]
-  UPC_not_in: [String!]
-  UPC_lt: String
-  UPC_lte: String
-  UPC_gt: String
-  UPC_gte: String
-  UPC_contains: String
-  UPC_not_contains: String
-  UPC_starts_with: String
-  UPC_not_starts_with: String
-  UPC_ends_with: String
-  UPC_not_ends_with: String
-  AND: [GroceryItemWhereInput!]
-}
-
-input GroceryItemWhereUniqueInput {
-  id: ID
-}
-
-type GroceryTrip {
-  id: ID!
-  purchaser: User!
-  name: String!
-  description: String
-  date: String
-}
-
-type GroceryTripConnection {
-  pageInfo: PageInfo!
-  edges: [GroceryTripEdge]!
-  aggregate: AggregateGroceryTrip!
-}
-
-input GroceryTripCreateInput {
-  id: ID
-  purchaser: UserCreateOneInput!
-  name: String!
-  description: String
-  date: String
-}
-
-input GroceryTripCreateOneInput {
-  create: GroceryTripCreateInput
-  connect: GroceryTripWhereUniqueInput
-}
-
-type GroceryTripEdge {
-  node: GroceryTrip!
-  cursor: String!
-}
-
-enum GroceryTripOrderByInput {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-  description_ASC
-  description_DESC
-  date_ASC
-  date_DESC
-}
-
-type GroceryTripPreviousValues {
-  id: ID!
-  name: String!
-  description: String
-  date: String
-}
-
-type GroceryTripSubscriptionPayload {
-  mutation: MutationType!
-  node: GroceryTrip
-  updatedFields: [String!]
-  previousValues: GroceryTripPreviousValues
-}
-
-input GroceryTripSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: GroceryTripWhereInput
-  AND: [GroceryTripSubscriptionWhereInput!]
-}
-
-input GroceryTripUpdateDataInput {
-  purchaser: UserUpdateOneRequiredInput
-  name: String
-  description: String
-  date: String
-}
-
-input GroceryTripUpdateInput {
-  purchaser: UserUpdateOneRequiredInput
-  name: String
-  description: String
-  date: String
-}
-
-input GroceryTripUpdateManyMutationInput {
-  name: String
-  description: String
-  date: String
-}
-
-input GroceryTripUpdateOneInput {
-  create: GroceryTripCreateInput
-  update: GroceryTripUpdateDataInput
-  upsert: GroceryTripUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: GroceryTripWhereUniqueInput
-}
-
-input GroceryTripUpsertNestedInput {
-  update: GroceryTripUpdateDataInput!
-  create: GroceryTripCreateInput!
-}
-
-input GroceryTripWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  purchaser: UserWhereInput
   name: String
   name_not: String
   name_in: [String!]
@@ -569,24 +308,41 @@ input GroceryTripWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
-  date: String
-  date_not: String
-  date_in: [String!]
-  date_not_in: [String!]
-  date_lt: String
-  date_lte: String
-  date_gt: String
-  date_gte: String
-  date_contains: String
-  date_not_contains: String
-  date_starts_with: String
-  date_not_starts_with: String
-  date_ends_with: String
-  date_not_ends_with: String
-  AND: [GroceryTripWhereInput!]
+  count: Float
+  count_not: Float
+  count_in: [Float!]
+  count_not_in: [Float!]
+  count_lt: Float
+  count_lte: Float
+  count_gt: Float
+  count_gte: Float
+  expiration: DateTime
+  expiration_not: DateTime
+  expiration_in: [DateTime!]
+  expiration_not_in: [DateTime!]
+  expiration_lt: DateTime
+  expiration_lte: DateTime
+  expiration_gt: DateTime
+  expiration_gte: DateTime
+  UPC: String
+  UPC_not: String
+  UPC_in: [String!]
+  UPC_not_in: [String!]
+  UPC_lt: String
+  UPC_lte: String
+  UPC_gt: String
+  UPC_gte: String
+  UPC_contains: String
+  UPC_not_contains: String
+  UPC_starts_with: String
+  UPC_not_starts_with: String
+  UPC_ends_with: String
+  UPC_not_ends_with: String
+  category: GroceryCategoryWhereInput
+  AND: [GroceryItemWhereInput!]
 }
 
-input GroceryTripWhereUniqueInput {
+input GroceryItemWhereUniqueInput {
   id: ID
 }
 
@@ -605,18 +361,6 @@ type Mutation {
   upsertGroceryItem(where: GroceryItemWhereUniqueInput!, create: GroceryItemCreateInput!, update: GroceryItemUpdateInput!): GroceryItem!
   deleteGroceryItem(where: GroceryItemWhereUniqueInput!): GroceryItem
   deleteManyGroceryItems(where: GroceryItemWhereInput): BatchPayload!
-  createGroceryTrip(data: GroceryTripCreateInput!): GroceryTrip!
-  updateGroceryTrip(data: GroceryTripUpdateInput!, where: GroceryTripWhereUniqueInput!): GroceryTrip
-  updateManyGroceryTrips(data: GroceryTripUpdateManyMutationInput!, where: GroceryTripWhereInput): BatchPayload!
-  upsertGroceryTrip(where: GroceryTripWhereUniqueInput!, create: GroceryTripCreateInput!, update: GroceryTripUpdateInput!): GroceryTrip!
-  deleteGroceryTrip(where: GroceryTripWhereUniqueInput!): GroceryTrip
-  deleteManyGroceryTrips(where: GroceryTripWhereInput): BatchPayload!
-  createUser(data: UserCreateInput!): User!
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  deleteUser(where: UserWhereUniqueInput!): User
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -643,156 +387,11 @@ type Query {
   groceryItem(where: GroceryItemWhereUniqueInput!): GroceryItem
   groceryItems(where: GroceryItemWhereInput, orderBy: GroceryItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GroceryItem]!
   groceryItemsConnection(where: GroceryItemWhereInput, orderBy: GroceryItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroceryItemConnection!
-  groceryTrip(where: GroceryTripWhereUniqueInput!): GroceryTrip
-  groceryTrips(where: GroceryTripWhereInput, orderBy: GroceryTripOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [GroceryTrip]!
-  groceryTripsConnection(where: GroceryTripWhereInput, orderBy: GroceryTripOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GroceryTripConnection!
-  user(where: UserWhereUniqueInput!): User
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
   groceryCategory(where: GroceryCategorySubscriptionWhereInput): GroceryCategorySubscriptionPayload
   groceryItem(where: GroceryItemSubscriptionWhereInput): GroceryItemSubscriptionPayload
-  groceryTrip(where: GroceryTripSubscriptionWhereInput): GroceryTripSubscriptionPayload
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-}
-
-type User {
-  id: ID!
-  email: String!
-  name: String!
-}
-
-type UserConnection {
-  pageInfo: PageInfo!
-  edges: [UserEdge]!
-  aggregate: AggregateUser!
-}
-
-input UserCreateInput {
-  id: ID
-  email: String!
-  name: String!
-}
-
-input UserCreateOneInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-}
-
-type UserEdge {
-  node: User!
-  cursor: String!
-}
-
-enum UserOrderByInput {
-  id_ASC
-  id_DESC
-  email_ASC
-  email_DESC
-  name_ASC
-  name_DESC
-}
-
-type UserPreviousValues {
-  id: ID!
-  email: String!
-  name: String!
-}
-
-type UserSubscriptionPayload {
-  mutation: MutationType!
-  node: User
-  updatedFields: [String!]
-  previousValues: UserPreviousValues
-}
-
-input UserSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: UserWhereInput
-  AND: [UserSubscriptionWhereInput!]
-}
-
-input UserUpdateDataInput {
-  email: String
-  name: String
-}
-
-input UserUpdateInput {
-  email: String
-  name: String
-}
-
-input UserUpdateManyMutationInput {
-  email: String
-  name: String
-}
-
-input UserUpdateOneRequiredInput {
-  create: UserCreateInput
-  update: UserUpdateDataInput
-  upsert: UserUpsertNestedInput
-  connect: UserWhereUniqueInput
-}
-
-input UserUpsertNestedInput {
-  update: UserUpdateDataInput!
-  create: UserCreateInput!
-}
-
-input UserWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  email: String
-  email_not: String
-  email_in: [String!]
-  email_not_in: [String!]
-  email_lt: String
-  email_lte: String
-  email_gt: String
-  email_gte: String
-  email_contains: String
-  email_not_contains: String
-  email_starts_with: String
-  email_not_starts_with: String
-  email_ends_with: String
-  email_not_ends_with: String
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  AND: [UserWhereInput!]
-}
-
-input UserWhereUniqueInput {
-  id: ID
-  email: String
 }
 `

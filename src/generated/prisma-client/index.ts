@@ -18,8 +18,6 @@ export type Maybe<T> = T | undefined | null;
 export interface Exists {
   groceryCategory: (where?: GroceryCategoryWhereInput) => Promise<boolean>;
   groceryItem: (where?: GroceryItemWhereInput) => Promise<boolean>;
-  groceryTrip: (where?: GroceryTripWhereInput) => Promise<boolean>;
-  user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -83,46 +81,6 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => GroceryItemConnectionPromise;
-  groceryTrip: (
-    where: GroceryTripWhereUniqueInput
-  ) => GroceryTripNullablePromise;
-  groceryTrips: (args?: {
-    where?: GroceryTripWhereInput;
-    orderBy?: GroceryTripOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<GroceryTrip>;
-  groceryTripsConnection: (args?: {
-    where?: GroceryTripWhereInput;
-    orderBy?: GroceryTripOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => GroceryTripConnectionPromise;
-  user: (where: UserWhereUniqueInput) => UserNullablePromise;
-  users: (args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<User>;
-  usersConnection: (args?: {
-    where?: UserWhereInput;
-    orderBy?: UserOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => UserConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -169,40 +127,6 @@ export interface Prisma {
   deleteManyGroceryItems: (
     where?: GroceryItemWhereInput
   ) => BatchPayloadPromise;
-  createGroceryTrip: (data: GroceryTripCreateInput) => GroceryTripPromise;
-  updateGroceryTrip: (args: {
-    data: GroceryTripUpdateInput;
-    where: GroceryTripWhereUniqueInput;
-  }) => GroceryTripPromise;
-  updateManyGroceryTrips: (args: {
-    data: GroceryTripUpdateManyMutationInput;
-    where?: GroceryTripWhereInput;
-  }) => BatchPayloadPromise;
-  upsertGroceryTrip: (args: {
-    where: GroceryTripWhereUniqueInput;
-    create: GroceryTripCreateInput;
-    update: GroceryTripUpdateInput;
-  }) => GroceryTripPromise;
-  deleteGroceryTrip: (where: GroceryTripWhereUniqueInput) => GroceryTripPromise;
-  deleteManyGroceryTrips: (
-    where?: GroceryTripWhereInput
-  ) => BatchPayloadPromise;
-  createUser: (data: UserCreateInput) => UserPromise;
-  updateUser: (args: {
-    data: UserUpdateInput;
-    where: UserWhereUniqueInput;
-  }) => UserPromise;
-  updateManyUsers: (args: {
-    data: UserUpdateManyMutationInput;
-    where?: UserWhereInput;
-  }) => BatchPayloadPromise;
-  upsertUser: (args: {
-    where: UserWhereUniqueInput;
-    create: UserCreateInput;
-    update: UserUpdateInput;
-  }) => UserPromise;
-  deleteUser: (where: UserWhereUniqueInput) => UserPromise;
-  deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -218,12 +142,6 @@ export interface Subscription {
   groceryItem: (
     where?: GroceryItemSubscriptionWhereInput
   ) => GroceryItemSubscriptionPayloadSubscription;
-  groceryTrip: (
-    where?: GroceryTripSubscriptionWhereInput
-  ) => GroceryTripSubscriptionPayloadSubscription;
-  user: (
-    where?: UserSubscriptionWhereInput
-  ) => UserSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -234,11 +152,23 @@ export interface ClientConstructor<T> {
  * Types
  */
 
+export type GroceryCategoryOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "description_ASC"
+  | "description_DESC"
+  | "units_ASC"
+  | "units_DESC";
+
 export type GroceryItemOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "description_ASC"
+  | "description_DESC"
   | "count_ASC"
   | "count_DESC"
   | "expiration_ASC"
@@ -246,213 +176,12 @@ export type GroceryItemOrderByInput =
   | "UPC_ASC"
   | "UPC_DESC";
 
-export type GroceryCategoryOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "units_ASC"
-  | "units_DESC";
-
-export type GroceryTripOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "description_ASC"
-  | "description_DESC"
-  | "date_ASC"
-  | "date_DESC";
-
-export type UserOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "name_ASC"
-  | "name_DESC";
-
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export type GroceryCategoryWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
+  name?: Maybe<String>;
 }>;
-
-export interface GroceryItemWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  associatedTrip?: Maybe<GroceryTripWhereInput>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  count?: Maybe<Float>;
-  count_not?: Maybe<Float>;
-  count_in?: Maybe<Float[] | Float>;
-  count_not_in?: Maybe<Float[] | Float>;
-  count_lt?: Maybe<Float>;
-  count_lte?: Maybe<Float>;
-  count_gt?: Maybe<Float>;
-  count_gte?: Maybe<Float>;
-  expiration?: Maybe<String>;
-  expiration_not?: Maybe<String>;
-  expiration_in?: Maybe<String[] | String>;
-  expiration_not_in?: Maybe<String[] | String>;
-  expiration_lt?: Maybe<String>;
-  expiration_lte?: Maybe<String>;
-  expiration_gt?: Maybe<String>;
-  expiration_gte?: Maybe<String>;
-  expiration_contains?: Maybe<String>;
-  expiration_not_contains?: Maybe<String>;
-  expiration_starts_with?: Maybe<String>;
-  expiration_not_starts_with?: Maybe<String>;
-  expiration_ends_with?: Maybe<String>;
-  expiration_not_ends_with?: Maybe<String>;
-  UPC?: Maybe<String>;
-  UPC_not?: Maybe<String>;
-  UPC_in?: Maybe<String[] | String>;
-  UPC_not_in?: Maybe<String[] | String>;
-  UPC_lt?: Maybe<String>;
-  UPC_lte?: Maybe<String>;
-  UPC_gt?: Maybe<String>;
-  UPC_gte?: Maybe<String>;
-  UPC_contains?: Maybe<String>;
-  UPC_not_contains?: Maybe<String>;
-  UPC_starts_with?: Maybe<String>;
-  UPC_not_starts_with?: Maybe<String>;
-  UPC_ends_with?: Maybe<String>;
-  UPC_not_ends_with?: Maybe<String>;
-  AND?: Maybe<GroceryItemWhereInput[] | GroceryItemWhereInput>;
-}
-
-export interface GroceryTripWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  purchaser?: Maybe<UserWhereInput>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  description?: Maybe<String>;
-  description_not?: Maybe<String>;
-  description_in?: Maybe<String[] | String>;
-  description_not_in?: Maybe<String[] | String>;
-  description_lt?: Maybe<String>;
-  description_lte?: Maybe<String>;
-  description_gt?: Maybe<String>;
-  description_gte?: Maybe<String>;
-  description_contains?: Maybe<String>;
-  description_not_contains?: Maybe<String>;
-  description_starts_with?: Maybe<String>;
-  description_not_starts_with?: Maybe<String>;
-  description_ends_with?: Maybe<String>;
-  description_not_ends_with?: Maybe<String>;
-  date?: Maybe<String>;
-  date_not?: Maybe<String>;
-  date_in?: Maybe<String[] | String>;
-  date_not_in?: Maybe<String[] | String>;
-  date_lt?: Maybe<String>;
-  date_lte?: Maybe<String>;
-  date_gt?: Maybe<String>;
-  date_gte?: Maybe<String>;
-  date_contains?: Maybe<String>;
-  date_not_contains?: Maybe<String>;
-  date_starts_with?: Maybe<String>;
-  date_not_starts_with?: Maybe<String>;
-  date_ends_with?: Maybe<String>;
-  date_not_ends_with?: Maybe<String>;
-  AND?: Maybe<GroceryTripWhereInput[] | GroceryTripWhereInput>;
-}
-
-export interface UserWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  email?: Maybe<String>;
-  email_not?: Maybe<String>;
-  email_in?: Maybe<String[] | String>;
-  email_not_in?: Maybe<String[] | String>;
-  email_lt?: Maybe<String>;
-  email_lte?: Maybe<String>;
-  email_gt?: Maybe<String>;
-  email_gte?: Maybe<String>;
-  email_contains?: Maybe<String>;
-  email_not_contains?: Maybe<String>;
-  email_starts_with?: Maybe<String>;
-  email_not_starts_with?: Maybe<String>;
-  email_ends_with?: Maybe<String>;
-  email_not_ends_with?: Maybe<String>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  AND?: Maybe<UserWhereInput[] | UserWhereInput>;
-}
 
 export interface GroceryCategoryWhereInput {
   id?: Maybe<ID_Input>;
@@ -483,6 +212,20 @@ export interface GroceryCategoryWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  description?: Maybe<String>;
+  description_not?: Maybe<String>;
+  description_in?: Maybe<String[] | String>;
+  description_not_in?: Maybe<String[] | String>;
+  description_lt?: Maybe<String>;
+  description_lte?: Maybe<String>;
+  description_gt?: Maybe<String>;
+  description_gte?: Maybe<String>;
+  description_contains?: Maybe<String>;
+  description_not_contains?: Maybe<String>;
+  description_starts_with?: Maybe<String>;
+  description_not_starts_with?: Maybe<String>;
+  description_ends_with?: Maybe<String>;
+  description_not_ends_with?: Maybe<String>;
   units?: Maybe<String>;
   units_not?: Maybe<String>;
   units_in?: Maybe<String[] | String>;
@@ -497,7 +240,6 @@ export interface GroceryCategoryWhereInput {
   units_not_starts_with?: Maybe<String>;
   units_ends_with?: Maybe<String>;
   units_not_ends_with?: Maybe<String>;
-  items_some?: Maybe<GroceryItemWhereInput>;
   AND?: Maybe<GroceryCategoryWhereInput[] | GroceryCategoryWhereInput>;
 }
 
@@ -505,159 +247,7 @@ export type GroceryItemWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
-export type GroceryTripWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-}>;
-
-export interface GroceryCategoryCreateInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  tags?: Maybe<GroceryCategoryCreatetagsInput>;
-  units?: Maybe<String>;
-  items?: Maybe<GroceryItemCreateManyInput>;
-}
-
-export interface GroceryCategoryCreatetagsInput {
-  set?: Maybe<String[] | String>;
-}
-
-export interface GroceryItemCreateManyInput {
-  create?: Maybe<GroceryItemCreateInput[] | GroceryItemCreateInput>;
-  connect?: Maybe<GroceryItemWhereUniqueInput[] | GroceryItemWhereUniqueInput>;
-}
-
-export interface GroceryItemCreateInput {
-  id?: Maybe<ID_Input>;
-  associatedTrip?: Maybe<GroceryTripCreateOneInput>;
-  name: String;
-  count: Float;
-  expiration?: Maybe<String>;
-  UPC?: Maybe<String>;
-}
-
-export interface GroceryTripCreateOneInput {
-  create?: Maybe<GroceryTripCreateInput>;
-  connect?: Maybe<GroceryTripWhereUniqueInput>;
-}
-
-export interface GroceryTripCreateInput {
-  id?: Maybe<ID_Input>;
-  purchaser: UserCreateOneInput;
-  name: String;
-  description?: Maybe<String>;
-  date?: Maybe<String>;
-}
-
-export interface UserCreateOneInput {
-  create?: Maybe<UserCreateInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface UserCreateInput {
-  id?: Maybe<ID_Input>;
-  email: String;
-  name: String;
-}
-
-export interface GroceryCategoryUpdateInput {
-  name?: Maybe<String>;
-  tags?: Maybe<GroceryCategoryUpdatetagsInput>;
-  units?: Maybe<String>;
-  items?: Maybe<GroceryItemUpdateManyInput>;
-}
-
-export interface GroceryCategoryUpdatetagsInput {
-  set?: Maybe<String[] | String>;
-}
-
-export interface GroceryItemUpdateManyInput {
-  create?: Maybe<GroceryItemCreateInput[] | GroceryItemCreateInput>;
-  update?: Maybe<
-    | GroceryItemUpdateWithWhereUniqueNestedInput[]
-    | GroceryItemUpdateWithWhereUniqueNestedInput
-  >;
-  upsert?: Maybe<
-    | GroceryItemUpsertWithWhereUniqueNestedInput[]
-    | GroceryItemUpsertWithWhereUniqueNestedInput
-  >;
-  delete?: Maybe<GroceryItemWhereUniqueInput[] | GroceryItemWhereUniqueInput>;
-  connect?: Maybe<GroceryItemWhereUniqueInput[] | GroceryItemWhereUniqueInput>;
-  set?: Maybe<GroceryItemWhereUniqueInput[] | GroceryItemWhereUniqueInput>;
-  disconnect?: Maybe<
-    GroceryItemWhereUniqueInput[] | GroceryItemWhereUniqueInput
-  >;
-  deleteMany?: Maybe<
-    GroceryItemScalarWhereInput[] | GroceryItemScalarWhereInput
-  >;
-  updateMany?: Maybe<
-    | GroceryItemUpdateManyWithWhereNestedInput[]
-    | GroceryItemUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface GroceryItemUpdateWithWhereUniqueNestedInput {
-  where: GroceryItemWhereUniqueInput;
-  data: GroceryItemUpdateDataInput;
-}
-
-export interface GroceryItemUpdateDataInput {
-  associatedTrip?: Maybe<GroceryTripUpdateOneInput>;
-  name?: Maybe<String>;
-  count?: Maybe<Float>;
-  expiration?: Maybe<String>;
-  UPC?: Maybe<String>;
-}
-
-export interface GroceryTripUpdateOneInput {
-  create?: Maybe<GroceryTripCreateInput>;
-  update?: Maybe<GroceryTripUpdateDataInput>;
-  upsert?: Maybe<GroceryTripUpsertNestedInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<GroceryTripWhereUniqueInput>;
-}
-
-export interface GroceryTripUpdateDataInput {
-  purchaser?: Maybe<UserUpdateOneRequiredInput>;
-  name?: Maybe<String>;
-  description?: Maybe<String>;
-  date?: Maybe<String>;
-}
-
-export interface UserUpdateOneRequiredInput {
-  create?: Maybe<UserCreateInput>;
-  update?: Maybe<UserUpdateDataInput>;
-  upsert?: Maybe<UserUpsertNestedInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface UserUpdateDataInput {
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-}
-
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
-}
-
-export interface GroceryTripUpsertNestedInput {
-  update: GroceryTripUpdateDataInput;
-  create: GroceryTripCreateInput;
-}
-
-export interface GroceryItemUpsertWithWhereUniqueNestedInput {
-  where: GroceryItemWhereUniqueInput;
-  update: GroceryItemUpdateDataInput;
-  create: GroceryItemCreateInput;
-}
-
-export interface GroceryItemScalarWhereInput {
+export interface GroceryItemWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -686,6 +276,20 @@ export interface GroceryItemScalarWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  description?: Maybe<String>;
+  description_not?: Maybe<String>;
+  description_in?: Maybe<String[] | String>;
+  description_not_in?: Maybe<String[] | String>;
+  description_lt?: Maybe<String>;
+  description_lte?: Maybe<String>;
+  description_gt?: Maybe<String>;
+  description_gte?: Maybe<String>;
+  description_contains?: Maybe<String>;
+  description_not_contains?: Maybe<String>;
+  description_starts_with?: Maybe<String>;
+  description_not_starts_with?: Maybe<String>;
+  description_ends_with?: Maybe<String>;
+  description_not_ends_with?: Maybe<String>;
   count?: Maybe<Float>;
   count_not?: Maybe<Float>;
   count_in?: Maybe<Float[] | Float>;
@@ -694,20 +298,14 @@ export interface GroceryItemScalarWhereInput {
   count_lte?: Maybe<Float>;
   count_gt?: Maybe<Float>;
   count_gte?: Maybe<Float>;
-  expiration?: Maybe<String>;
-  expiration_not?: Maybe<String>;
-  expiration_in?: Maybe<String[] | String>;
-  expiration_not_in?: Maybe<String[] | String>;
-  expiration_lt?: Maybe<String>;
-  expiration_lte?: Maybe<String>;
-  expiration_gt?: Maybe<String>;
-  expiration_gte?: Maybe<String>;
-  expiration_contains?: Maybe<String>;
-  expiration_not_contains?: Maybe<String>;
-  expiration_starts_with?: Maybe<String>;
-  expiration_not_starts_with?: Maybe<String>;
-  expiration_ends_with?: Maybe<String>;
-  expiration_not_ends_with?: Maybe<String>;
+  expiration?: Maybe<DateTimeInput>;
+  expiration_not?: Maybe<DateTimeInput>;
+  expiration_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  expiration_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  expiration_lt?: Maybe<DateTimeInput>;
+  expiration_lte?: Maybe<DateTimeInput>;
+  expiration_gt?: Maybe<DateTimeInput>;
+  expiration_gte?: Maybe<DateTimeInput>;
   UPC?: Maybe<String>;
   UPC_not?: Maybe<String>;
   UPC_in?: Maybe<String[] | String>;
@@ -722,65 +320,79 @@ export interface GroceryItemScalarWhereInput {
   UPC_not_starts_with?: Maybe<String>;
   UPC_ends_with?: Maybe<String>;
   UPC_not_ends_with?: Maybe<String>;
-  AND?: Maybe<GroceryItemScalarWhereInput[] | GroceryItemScalarWhereInput>;
-  OR?: Maybe<GroceryItemScalarWhereInput[] | GroceryItemScalarWhereInput>;
-  NOT?: Maybe<GroceryItemScalarWhereInput[] | GroceryItemScalarWhereInput>;
+  category?: Maybe<GroceryCategoryWhereInput>;
+  AND?: Maybe<GroceryItemWhereInput[] | GroceryItemWhereInput>;
 }
 
-export interface GroceryItemUpdateManyWithWhereNestedInput {
-  where: GroceryItemScalarWhereInput;
-  data: GroceryItemUpdateManyDataInput;
+export interface GroceryCategoryCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  description?: Maybe<String>;
+  units?: Maybe<String>;
 }
 
-export interface GroceryItemUpdateManyDataInput {
+export interface GroceryCategoryUpdateInput {
   name?: Maybe<String>;
-  count?: Maybe<Float>;
-  expiration?: Maybe<String>;
-  UPC?: Maybe<String>;
+  description?: Maybe<String>;
+  units?: Maybe<String>;
 }
 
 export interface GroceryCategoryUpdateManyMutationInput {
   name?: Maybe<String>;
-  tags?: Maybe<GroceryCategoryUpdatetagsInput>;
+  description?: Maybe<String>;
   units?: Maybe<String>;
 }
 
-export interface GroceryItemUpdateInput {
-  associatedTrip?: Maybe<GroceryTripUpdateOneInput>;
-  name?: Maybe<String>;
+export interface GroceryItemCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  description?: Maybe<String>;
   count?: Maybe<Float>;
-  expiration?: Maybe<String>;
+  expiration?: Maybe<DateTimeInput>;
   UPC?: Maybe<String>;
+  category?: Maybe<GroceryCategoryCreateOneInput>;
+}
+
+export interface GroceryCategoryCreateOneInput {
+  create?: Maybe<GroceryCategoryCreateInput>;
+  connect?: Maybe<GroceryCategoryWhereUniqueInput>;
+}
+
+export interface GroceryItemUpdateInput {
+  name?: Maybe<String>;
+  description?: Maybe<String>;
+  count?: Maybe<Float>;
+  expiration?: Maybe<DateTimeInput>;
+  UPC?: Maybe<String>;
+  category?: Maybe<GroceryCategoryUpdateOneInput>;
+}
+
+export interface GroceryCategoryUpdateOneInput {
+  create?: Maybe<GroceryCategoryCreateInput>;
+  update?: Maybe<GroceryCategoryUpdateDataInput>;
+  upsert?: Maybe<GroceryCategoryUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<GroceryCategoryWhereUniqueInput>;
+}
+
+export interface GroceryCategoryUpdateDataInput {
+  name?: Maybe<String>;
+  description?: Maybe<String>;
+  units?: Maybe<String>;
+}
+
+export interface GroceryCategoryUpsertNestedInput {
+  update: GroceryCategoryUpdateDataInput;
+  create: GroceryCategoryCreateInput;
 }
 
 export interface GroceryItemUpdateManyMutationInput {
   name?: Maybe<String>;
+  description?: Maybe<String>;
   count?: Maybe<Float>;
-  expiration?: Maybe<String>;
+  expiration?: Maybe<DateTimeInput>;
   UPC?: Maybe<String>;
-}
-
-export interface GroceryTripUpdateInput {
-  purchaser?: Maybe<UserUpdateOneRequiredInput>;
-  name?: Maybe<String>;
-  description?: Maybe<String>;
-  date?: Maybe<String>;
-}
-
-export interface GroceryTripUpdateManyMutationInput {
-  name?: Maybe<String>;
-  description?: Maybe<String>;
-  date?: Maybe<String>;
-}
-
-export interface UserUpdateInput {
-  email?: Maybe<String>;
-  name?: Maybe<String>;
-}
-
-export interface UserUpdateManyMutationInput {
-  email?: Maybe<String>;
-  name?: Maybe<String>;
 }
 
 export interface GroceryCategorySubscriptionWhereInput {
@@ -806,26 +418,6 @@ export interface GroceryItemSubscriptionWhereInput {
   >;
 }
 
-export interface GroceryTripSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<GroceryTripWhereInput>;
-  AND?: Maybe<
-    GroceryTripSubscriptionWhereInput[] | GroceryTripSubscriptionWhereInput
-  >;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<UserWhereInput>;
-  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-}
-
 export interface NodeNode {
   id: ID_Output;
 }
@@ -833,7 +425,7 @@ export interface NodeNode {
 export interface GroceryCategory {
   id: ID_Output;
   name: String;
-  tags: String[];
+  description?: String;
   units?: String;
 }
 
@@ -842,17 +434,8 @@ export interface GroceryCategoryPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
-  tags: () => Promise<String[]>;
+  description: () => Promise<String>;
   units: () => Promise<String>;
-  items: <T = FragmentableArray<GroceryItem>>(args?: {
-    where?: GroceryItemWhereInput;
-    orderBy?: GroceryItemOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
 }
 
 export interface GroceryCategorySubscription
@@ -860,17 +443,8 @@ export interface GroceryCategorySubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-  tags: () => Promise<AsyncIterator<String[]>>;
+  description: () => Promise<AsyncIterator<String>>;
   units: () => Promise<AsyncIterator<String>>;
-  items: <T = Promise<AsyncIterator<GroceryItemSubscription>>>(args?: {
-    where?: GroceryItemWhereInput;
-    orderBy?: GroceryItemOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
 }
 
 export interface GroceryCategoryNullablePromise
@@ -878,119 +452,8 @@ export interface GroceryCategoryNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
-  tags: () => Promise<String[]>;
+  description: () => Promise<String>;
   units: () => Promise<String>;
-  items: <T = FragmentableArray<GroceryItem>>(args?: {
-    where?: GroceryItemWhereInput;
-    orderBy?: GroceryItemOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface GroceryItem {
-  id: ID_Output;
-  name: String;
-  count: Float;
-  expiration?: String;
-  UPC?: String;
-}
-
-export interface GroceryItemPromise extends Promise<GroceryItem>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  associatedTrip: <T = GroceryTripPromise>() => T;
-  name: () => Promise<String>;
-  count: () => Promise<Float>;
-  expiration: () => Promise<String>;
-  UPC: () => Promise<String>;
-}
-
-export interface GroceryItemSubscription
-  extends Promise<AsyncIterator<GroceryItem>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  associatedTrip: <T = GroceryTripSubscription>() => T;
-  name: () => Promise<AsyncIterator<String>>;
-  count: () => Promise<AsyncIterator<Float>>;
-  expiration: () => Promise<AsyncIterator<String>>;
-  UPC: () => Promise<AsyncIterator<String>>;
-}
-
-export interface GroceryItemNullablePromise
-  extends Promise<GroceryItem | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  associatedTrip: <T = GroceryTripPromise>() => T;
-  name: () => Promise<String>;
-  count: () => Promise<Float>;
-  expiration: () => Promise<String>;
-  UPC: () => Promise<String>;
-}
-
-export interface GroceryTrip {
-  id: ID_Output;
-  name: String;
-  description?: String;
-  date?: String;
-}
-
-export interface GroceryTripPromise extends Promise<GroceryTrip>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  purchaser: <T = UserPromise>() => T;
-  name: () => Promise<String>;
-  description: () => Promise<String>;
-  date: () => Promise<String>;
-}
-
-export interface GroceryTripSubscription
-  extends Promise<AsyncIterator<GroceryTrip>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  purchaser: <T = UserSubscription>() => T;
-  name: () => Promise<AsyncIterator<String>>;
-  description: () => Promise<AsyncIterator<String>>;
-  date: () => Promise<AsyncIterator<String>>;
-}
-
-export interface GroceryTripNullablePromise
-  extends Promise<GroceryTrip | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  purchaser: <T = UserPromise>() => T;
-  name: () => Promise<String>;
-  description: () => Promise<String>;
-  date: () => Promise<String>;
-}
-
-export interface User {
-  id: ID_Output;
-  email: String;
-  name: String;
-}
-
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  name: () => Promise<String>;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserNullablePromise
-  extends Promise<User | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  name: () => Promise<String>;
 }
 
 export interface GroceryCategoryConnection {
@@ -1072,6 +535,49 @@ export interface AggregateGroceryCategorySubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface GroceryItem {
+  id: ID_Output;
+  name: String;
+  description?: String;
+  count: Float;
+  expiration?: DateTimeOutput;
+  UPC?: String;
+}
+
+export interface GroceryItemPromise extends Promise<GroceryItem>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  description: () => Promise<String>;
+  count: () => Promise<Float>;
+  expiration: () => Promise<DateTimeOutput>;
+  UPC: () => Promise<String>;
+  category: <T = GroceryCategoryPromise>() => T;
+}
+
+export interface GroceryItemSubscription
+  extends Promise<AsyncIterator<GroceryItem>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  description: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<AsyncIterator<Float>>;
+  expiration: () => Promise<AsyncIterator<DateTimeOutput>>;
+  UPC: () => Promise<AsyncIterator<String>>;
+  category: <T = GroceryCategorySubscription>() => T;
+}
+
+export interface GroceryItemNullablePromise
+  extends Promise<GroceryItem | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  description: () => Promise<String>;
+  count: () => Promise<Float>;
+  expiration: () => Promise<DateTimeOutput>;
+  UPC: () => Promise<String>;
+  category: <T = GroceryCategoryPromise>() => T;
+}
+
 export interface GroceryItemConnection {
   pageInfo: PageInfo;
   edges: GroceryItemEdge[];
@@ -1128,116 +634,6 @@ export interface AggregateGroceryItemSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface GroceryTripConnection {
-  pageInfo: PageInfo;
-  edges: GroceryTripEdge[];
-}
-
-export interface GroceryTripConnectionPromise
-  extends Promise<GroceryTripConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GroceryTripEdge>>() => T;
-  aggregate: <T = AggregateGroceryTripPromise>() => T;
-}
-
-export interface GroceryTripConnectionSubscription
-  extends Promise<AsyncIterator<GroceryTripConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GroceryTripEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGroceryTripSubscription>() => T;
-}
-
-export interface GroceryTripEdge {
-  node: GroceryTrip;
-  cursor: String;
-}
-
-export interface GroceryTripEdgePromise
-  extends Promise<GroceryTripEdge>,
-    Fragmentable {
-  node: <T = GroceryTripPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface GroceryTripEdgeSubscription
-  extends Promise<AsyncIterator<GroceryTripEdge>>,
-    Fragmentable {
-  node: <T = GroceryTripSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateGroceryTrip {
-  count: Int;
-}
-
-export interface AggregateGroceryTripPromise
-  extends Promise<AggregateGroceryTrip>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateGroceryTripSubscription
-  extends Promise<AsyncIterator<AggregateGroceryTrip>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface UserEdge {
-  node: User;
-  cursor: String;
-}
-
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
 export interface BatchPayload {
   count: Long;
 }
@@ -1282,7 +678,7 @@ export interface GroceryCategorySubscriptionPayloadSubscription
 export interface GroceryCategoryPreviousValues {
   id: ID_Output;
   name: String;
-  tags: String[];
+  description?: String;
   units?: String;
 }
 
@@ -1291,7 +687,7 @@ export interface GroceryCategoryPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
-  tags: () => Promise<String[]>;
+  description: () => Promise<String>;
   units: () => Promise<String>;
 }
 
@@ -1300,7 +696,7 @@ export interface GroceryCategoryPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-  tags: () => Promise<AsyncIterator<String[]>>;
+  description: () => Promise<AsyncIterator<String>>;
   units: () => Promise<AsyncIterator<String>>;
 }
 
@@ -1332,8 +728,9 @@ export interface GroceryItemSubscriptionPayloadSubscription
 export interface GroceryItemPreviousValues {
   id: ID_Output;
   name: String;
+  description?: String;
   count: Float;
-  expiration?: String;
+  expiration?: DateTimeOutput;
   UPC?: String;
 }
 
@@ -1342,8 +739,9 @@ export interface GroceryItemPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
+  description: () => Promise<String>;
   count: () => Promise<Float>;
-  expiration: () => Promise<String>;
+  expiration: () => Promise<DateTimeOutput>;
   UPC: () => Promise<String>;
 }
 
@@ -1352,106 +750,10 @@ export interface GroceryItemPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-  count: () => Promise<AsyncIterator<Float>>;
-  expiration: () => Promise<AsyncIterator<String>>;
-  UPC: () => Promise<AsyncIterator<String>>;
-}
-
-export interface GroceryTripSubscriptionPayload {
-  mutation: MutationType;
-  node: GroceryTrip;
-  updatedFields: String[];
-  previousValues: GroceryTripPreviousValues;
-}
-
-export interface GroceryTripSubscriptionPayloadPromise
-  extends Promise<GroceryTripSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = GroceryTripPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = GroceryTripPreviousValuesPromise>() => T;
-}
-
-export interface GroceryTripSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<GroceryTripSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = GroceryTripSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = GroceryTripPreviousValuesSubscription>() => T;
-}
-
-export interface GroceryTripPreviousValues {
-  id: ID_Output;
-  name: String;
-  description?: String;
-  date?: String;
-}
-
-export interface GroceryTripPreviousValuesPromise
-  extends Promise<GroceryTripPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  description: () => Promise<String>;
-  date: () => Promise<String>;
-}
-
-export interface GroceryTripPreviousValuesSubscription
-  extends Promise<AsyncIterator<GroceryTripPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
-  date: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
-}
-
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
-export interface UserPreviousValues {
-  id: ID_Output;
-  email: String;
-  name: String;
-}
-
-export interface UserPreviousValuesPromise
-  extends Promise<UserPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  email: () => Promise<String>;
-  name: () => Promise<String>;
-}
-
-export interface UserPreviousValuesSubscription
-  extends Promise<AsyncIterator<UserPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  email: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<AsyncIterator<Float>>;
+  expiration: () => Promise<AsyncIterator<DateTimeOutput>>;
+  UPC: () => Promise<AsyncIterator<String>>;
 }
 
 /*
@@ -1466,11 +768,6 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 export type String = string;
 
 /*
-The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
-*/
-export type Float = number;
-
-/*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
 export type Int = number;
@@ -1480,6 +777,21 @@ The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
 
+/*
+The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).
+*/
+export type Float = number;
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
+
 export type Long = string;
 
 /**
@@ -1487,14 +799,6 @@ export type Long = string;
  */
 
 export const models: Model[] = [
-  {
-    name: "User",
-    embedded: false
-  },
-  {
-    name: "GroceryTrip",
-    embedded: false
-  },
   {
     name: "GroceryItem",
     embedded: false
