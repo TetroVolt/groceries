@@ -18,11 +18,12 @@ Run `docker-compose -f docker_configs/docker-compose.yml up` to start the prisma
 Run `prisma generate` to generate the client library if needed and it will generate the client based on
 where prisma/prisma.yml specifies. In this case in src/generated/prisma-client
 
-### Step 3: Seed Data
-Seed the database with data in prisma/seed.ts
-
 ### Step 4: Prisma Deploy
 Run `prisma deploy` to deploy the server.
+
+### Step 5: Start:Dev
+Run `yarn start:dev` for now
+
 
 Goals:
 Use Grocery store open API to keep track of the thing I have so I don't end up buying the same stuff a dozen times.
